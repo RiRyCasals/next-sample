@@ -1,9 +1,12 @@
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 
-type SSGProps = {}
+type SSGProps = {
+    message: string
+}
 
-const SSG: NextPage<SSGProps> = () => {
+const SSG: NextPage<SSGProps> = (props) => {
+    const { message } = props
     return (
         <div>
             <Head>
@@ -12,9 +15,17 @@ const SSG: NextPage<SSGProps> = () => {
             </Head>
             <main>
                 <p>このサイトは静的サイト生成によってビルド時に生成されたページです</p>
+                <p>{message}</p>
             </main>
         </div>
     )
+}
+
+export const getStaticProps: GetStaticProps<SSGProps> = async (context) => {
+    const timestamp = new Date().toLocaleString()
+    const message = `${timestamp}にgetStaticPropsが実行されました`
+    console.log(message)
+    return { props: {message} }
 }
 
 export default SSG
